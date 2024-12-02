@@ -10,6 +10,6 @@ common shared
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
 
-executable day01-exe
+executable day01
   import: shared
   main-is: day01.lhs
