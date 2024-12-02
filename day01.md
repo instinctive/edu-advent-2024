@@ -1,8 +1,21 @@
 # Day 1
+----
 
-```haskell
-module Main where
+This problem asks you to read two equal length lists organized by lines in
+pairs, sort each list, compare the sorted lists pair by pair, and sum the
+absolute values of the difference between each pair.
 
+```haskell top:2
 main :: IO ()
-main = putStrLn "Day 01"
+main = do
+    let parse = map (read @Int) . words
+    [aa,bb] <- transpose . map parse . lines <$> getContents
+    let ans = sum $ zipWith (\a b -> abs (a-b)) (sort aa) (sort bb)
+    print ans
+```
+
+## Module header
+
+```haskell top
+module Main where
 ```
