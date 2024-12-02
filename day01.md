@@ -1,5 +1,4 @@
 # Day 1
-----
 
 This problem asks you to read two equal length lists organized by lines in
 pairs, sort each list, compare the sorted lists pair by pair, and sum the
