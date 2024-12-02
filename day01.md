@@ -8,8 +8,8 @@ absolute values of the difference between each pair.
 main :: IO ()
 main = do
     let parse = map (read @Int) . words
-    [aa,bb] <- transpose . map parse . lines <$> getContents
-    let ans = sum $ zipWith (\a b -> abs (a-b)) (sort aa) (sort bb)
+    [aa,bb] <- map sort . transpose . map parse . lines <$> getContents
+    let ans = sum $ zipWith (\a b -> abs (a-b)) aa bb
     print ans
 ```
 
