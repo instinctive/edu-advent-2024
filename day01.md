@@ -13,6 +13,8 @@ main = do
     [aa,bb] <- map sort . transpose . map parse . lines <$> getContents
 ```
 
+## Part 1
+
 For Part 1, we sum the absolute difference between pairs of these two sorted
 lists:
 
@@ -20,6 +22,8 @@ lists:
     let part1 = sum $ zipWith (\a b -> abs (a-b)) aa bb
     print part1
 ```
+
+## Part 2
 
 For Part 2, we create a map (dictionary) of counts for each element of the
 second list.  Then for each element of the first list, we multiply it by its
