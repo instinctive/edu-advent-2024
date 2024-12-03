@@ -31,6 +31,22 @@ isSafe xx = all ok $ zipWith (-) (tail xx) xx
   where ok diff = 0 < diff && diff < 4
 ```
 
+## Part 2
+
+For Part 2 we are allowed to ``dampen'' (drop one level) from each report:
+
+```haskell
+dampen [_] = [[]]
+dampen (x:xx) = [xx] <> ((x:) <$> dampen xx)
+```
+
+And we can pass a report if any of these ``dampened reports'' pass:
+
+```haskell top:2
+    let part2 = length $ filter (any isSafe . dampen) reports
+    print part2
+```
+
 ## Module header and imports
 
 ```haskell top
