@@ -9,13 +9,13 @@ main = do
 ```
 
 We will do our calculations for part 1 and part 2 in the `State` monad,
-whiwh will hold the sum of the `mul(X,Y)` values, initially zero.
+which will hold the sum of the `mul(X,Y)` values.
 
 ```haskell top:1
 type Calc v = State Int v
 ```
 
-We run each part on the input.
+We run each part on the input string.
 
 ```haskell top:2
     let go f = print $ flip execState 0 $ f input
@@ -25,13 +25,8 @@ We run each part on the input.
 
 ## Part 1
 
-Here we are looking for `mul(X,Y)` with some constraints on `X` and `Y`:
-each is 1-3 digits. When we find one, it adds $x*y$ to the answer.
-
-So we're looking for the magic strings `mul(`, `,`, and `)` and
-the values of $x$ and $y$. If we run into a problem anywhere, we can restart
-looking for the whole pattern.
-
+We're looking for the magic strings `mul(`, `,`, and `)` and
+the values of $x$ and $y$.
 First we search the string until we find a `mul(`:
 
 ```haskell
@@ -45,6 +40,8 @@ part1 s
 Now we hope `s` has this form: `X,Y)...`, so we try to extract `X` and `Y`.
 If something fails we continue from s, which has the initial `mul(` dropped,
 so we guarantee progress through the entire string.
+
+This function returns the rest of the string to search.
 
 ```haskell
 getMul :: String -> Calc String
