@@ -78,5 +78,4 @@ We run `part2` on the whole input.
 ## Module header and imports
 
 ```haskell top
-{-# LANGUAGE ViewPatterns #-}
 module Main where
