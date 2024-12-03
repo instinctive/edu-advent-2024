@@ -10,6 +10,7 @@ common shared
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
     , containers
+    , mtl
     , text
 
 executable day01

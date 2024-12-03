@@ -8,6 +8,21 @@ main = do
     input <- getContents
 ```
 
+We will do our calculations for part 1 and part 2 in the `State` monad,
+whiwh will hold the sum of the `mul(X,Y)` values, initially zero.
+
+```haskell top:1
+type Calc v = State Int v
+```
+
+We run each part on the input.
+
+```haskell top:2
+    let go f = print $ flip execState 0 $ f input
+    go part1
+    go part2
+```
+
 ## Part 1
 
 Here we are looking for `mul(X,Y)` with some constraints on `X` and `Y`:
@@ -20,9 +35,10 @@ looking for the whole pattern.
 First we search the string until we find a `mul(`:
 
 ```haskell
-part1 "" = 0
+part1 :: String -> Calc ()
+part1 "" = pure ()
 part1 s
-    | isPrefixOf "mul(" s = getMul part1 (drop 4 s)
+    | isPrefixOf "mul(" s = getMul (drop 4 s) >>= part1
     | otherwise = part1 (tail s)
 ```
 
@@ -31,23 +47,19 @@ If something fails we continue from s, which has the initial `mul(` dropped,
 so we guarantee progress through the entire string.
 
 ```haskell
-getMul cont s
-    | xlen < 1 || xlen > 3 = cont s -- check number of X digits
-    | take 1 xmore /= ","  = cont s -- check for comma
-    | ylen < 1 || ylen > 3 = cont s -- check number of Y digits
-    | take 1 ymore /= ")"  = cont s -- check for right paren
-    | otherwise = read @Int xraw * read @Int yraw + cont (tail ymore)
+getMul :: String -> Calc String
+getMul s
+    | xlen < 1 || xlen > 3 = pure s -- check number of X digits
+    | take 1 xmore /= ","  = pure s -- check for comma
+    | ylen < 1 || ylen > 3 = pure s -- check number of Y digits
+    | take 1 ymore /= ")"  = pure s -- check for right paren
+    | otherwise = modify' (+mulval) >> pure (tail ymore)
   where
     (xraw,xmore) = span isDigit s
     (yraw,ymore) = span isDigit (tail xmore)
     xlen = length xraw
     ylen = length yraw
-```
-
-We run `part1` on the whole input.
-
-```haskell top:2
-    print $ part1 input
+    mulval = read @Int xraw * read @Int yraw
 ```
 
 ## Part 2
@@ -57,25 +69,22 @@ Here there are two *states* we can be in:
 *dont*, where we are searching for `do()`.
 
 ```haskell
-part2 "" = 0
+part2 :: String -> Calc ()
+part2 "" = pure ()
 part2 s
     | isPrefixOf "don't()" s = dont (drop 7 s)
-    | isPrefixOf "mul("    s = getMul part2 (drop 4 s)
+    | isPrefixOf "mul("    s = getMul (drop 4 s) >>= part2
     | otherwise = part2 (tail s)
 
-dont "" = 0
+dont :: String -> Calc ()
+dont "" = pure ()
 dont s
     | isPrefixOf "do()" s = part2 (drop 4 s)
     | otherwise = dont (tail s)
-```
-
-We run `part2` on the whole input.
-
-```haskell top:2
-    print $ part2 input
 ```
 
 ## Module header and imports
 
 ```haskell top
 module Main where
+import Control.Monad.State ( State, execState, modify' )
