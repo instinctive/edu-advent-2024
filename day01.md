@@ -22,8 +22,20 @@ lists:
     print part1
 ```
 
-## Module header
+For Part 2, we create a map (dictionary) of counts for each element of the second list.
+Then for each element of the first list, we multiply it by its count, and sum those values.
+
+```haskell
+    let counts = M.fromListWith (+) $ zip bb (repeat 1)
+        lookup k = M.findWithDefault 0 k counts
+        part2 = sum $ aa <&> \a -> a * lookup a
+    print part2
+```
+
+## Module header and imports
 
 ```haskell top
 module Main where
+
+import qualified Data.Map.Strict as M
 ```

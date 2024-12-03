@@ -13,3 +13,4 @@ common shared
 executable day01
   import: shared
   main-is: day01.lhs
+  build-depends: containers
