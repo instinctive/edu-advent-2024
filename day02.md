@@ -23,7 +23,7 @@ lists:
 
 A safe report, as defined in the problem statement, has levels that are either
 strictly increasing or strictly decreasing, and the absolute difference between
-successive levels `d` is $0\lt d\lt 4$.
+successive levels `diff` is $0\lt\hbox{diff}\lt 4$.
 
 ```haskell
 isSafe xx@(a:b:_) | a > b = isSafe (map negate xx)
