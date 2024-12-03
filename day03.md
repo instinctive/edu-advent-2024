@@ -61,9 +61,9 @@ getMul s
 
 ## Part 2
 
-Here there are two *states* we can be in:
-*part2*, where we are searching for `mul(X,Y)` and `don't()`, and
-*dont*, where we are searching for `do()`.
+Here there are two states we can be in:
+`part2`, where we are searching for `mul(X,Y)` and `don't()`, and
+`dont`, where we are searching for `do()`.
 
 ```haskell
 part2 :: String -> Calc ()
