@@ -1,4 +1,4 @@
-# Day 2
+# [Day 2](https://adventofcode.com/2024/day/2)
 
 The input to this problem are a number of reports, one report per line, and
 each report is a list of integers:
