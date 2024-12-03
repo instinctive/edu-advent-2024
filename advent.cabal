@@ -9,8 +9,13 @@ common shared
   default-language: GHC2021
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
+    , containers
+    , text
 
 executable day01
   import: shared
   main-is: day01.lhs
-  build-depends: containers
+
+executable day02
+  import: shared
+  main-is: day02.lhs
