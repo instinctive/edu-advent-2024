@@ -14,7 +14,6 @@ main = do
 
 For Part 1, we check each report to see if it's safe, and print
 the number of safe reports.
-lists:
 
 ```haskell top:2
     let part1 = length $ filter isSafe reports
@@ -33,14 +32,14 @@ isSafe xx = all ok $ zipWith (-) (tail xx) xx
 
 ## Part 2
 
-For Part 2 we are allowed to ``dampen'' (drop one level) from each report:
+For Part 2 we are allowed to "dampen" (drop one level) from each report:
 
 ```haskell
 dampen [_] = [[]]
 dampen (x:xx) = [xx] <> ((x:) <$> dampen xx)
 ```
 
-And we can pass a report if any of these ``dampened reports'' pass:
+And we can pass a report if any of these "dampened reports" pass:
 
 ```haskell top:2
     let part2 = length $ filter (any isSafe . dampen) reports
