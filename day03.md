@@ -53,26 +53,26 @@ We run `part1` on the whole input.
 ## Part 2
 
 Here there are two *states* we can be in:
-*enabled*, where we are searching for `mul(X,Y)` and `don't()`, and
-*disabled*, where we are searching for `do()`.
+*part2*, where we are searching for `mul(X,Y)` and `don't()`, and
+*dont*, where we are searching for `do()`.
 
 ```haskell
-disabled "" = 0
-disabled s
-    | isPrefixOf "do()" s = enabled (drop 4 s)
-    | otherwise = disabled (tail s)
+part2 "" = 0
+part2 s
+    | isPrefixOf "don't()" s = dont (drop 7 s)
+    | isPrefixOf "mul("    s = getMul part2 (drop 4 s)
+    | otherwise = part2 (tail s)
 
-enabled "" = 0
-enabled s
-    | isPrefixOf "don't()" s = disabled (drop 7 s)
-    | isPrefixOf "mul("    s = getMul enabled (drop 4 s)
-    | otherwise = enabled (tail s)
+dont "" = 0
+dont s
+    | isPrefixOf "do()" s = part2 (drop 4 s)
+    | otherwise = dont (tail s)
 ```
 
 We run `part2` on the whole input.
 
 ```haskell top:2
-    print $ enabled input
+    print $ part2 input
 ```
 
 ## Module header and imports
