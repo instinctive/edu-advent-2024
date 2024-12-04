@@ -40,6 +40,4 @@ count, and sum those values.
 
 ```haskell top
 module Main where
-
 import qualified Data.Map.Strict as M
-
