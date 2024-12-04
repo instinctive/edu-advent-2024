@@ -5,8 +5,6 @@
 [[Day 3](day03.md)]
 [[Day 4](day04.md)]
 
-----
-
 I'm experimenting with a "literate haskell" style, using
 [`markdown-unlit`](https://github.com/sol/markdown-unlit).  This is a very
 simple literate programming environment, and it allows some reordering but
