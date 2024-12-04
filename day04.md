@@ -89,8 +89,7 @@ Unlike in part 1, we only check the diagonal lines.
 
 ```haskell top:2
     let posRows = addPositions rows
-    let posLines = diags posRows
-    let middles = concatMap (findMiddles 1 "MAS") posLines
+    let middles = concatMap (findMiddles 1 "MAS") (diags posRows)
     print $ countXs middles
 ```
 
