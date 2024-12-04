@@ -69,7 +69,7 @@ addPositions rows =
 
 Now we will look for occurances of the word in each line.
 When we find one, we will return the position of the $k$-th letter.
-As in part 1, the word can be backwards or forwards.
+As in part 1, the word can appear backwards or forwards.
 
 ```haskell
 findMiddles k word line =
