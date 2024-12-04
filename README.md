@@ -16,6 +16,7 @@ Hey, it's an experiment!
 
 ## Solutions
 
-[Day 1](day01.md),
-[Day 2](day02.md)
-[Day 3](day03.md)
+[[Day 1](day01.md)]
+[[Day 2](day02.md)]
+[[Day 3](day03.md)]
+[[Day 4](day04.md)]
