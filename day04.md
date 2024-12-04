@@ -29,8 +29,8 @@ allLines rows =
     tri = transpose . zipWith drop [0..]
 ```
 
-Now we need to be able to count the words in any line.
-We look for it forwards and backwards.
+Now we need the count for the word in each line.
+The word can appear forwards or backwards.
 
 ```haskell
 count word line =
