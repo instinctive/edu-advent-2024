@@ -50,3 +50,4 @@ And we can pass a report if any of these "dampened reports" pass:
 
 ```haskell top
 module Main where
+```
