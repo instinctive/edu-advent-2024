@@ -73,9 +73,9 @@ As in part 1, the word can be backwards or forwards.
 
 ```haskell
 findMiddles k word line =
-    go word <> go (reverse word)
+    go k word <> go (length word - k - 1) (reverse word)
   where
-    go word = map (fst.(!!k)) $ filter (isPrefixOf word . map snd) $ tails line
+    go k word = map (fst.(!!k)) $ filter (isPrefixOf word . map snd) $ tails line
 ```
 
 We need two such positions to match to have an "X".
