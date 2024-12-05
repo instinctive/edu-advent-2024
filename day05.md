@@ -86,17 +86,17 @@ pruneRules rulesMap update =
     updateSet = S.fromList update
 ```
 
-This pruned rulesMap will not have cycles.
+This pruned rules map will not have cycles.
 
 Now we assign an ordering value to each key of this map that is one less than
 the minimum ordering value of any of the pages that must come after that key.
 Pages that have nothing that must come after them get the value zero (the
-highest value).
+highest value). Two notes:
 
-Note #1: The reason for the increasingly negative numbers is so that the final
-sort order will be non-decreasing.
+* The reason for the increasingly negative numbers is so that the final sort
+  order will be non-decreasing.
 
-Note #2: The computation of `valueMap` must be lazy.
+* The computation of the value map is lazy.
 
 ```haskell
 mkValueMap prunedMap =
