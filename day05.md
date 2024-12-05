@@ -58,15 +58,70 @@ The answer to part 1 is the sum of the middle elements of the valid updates.
 ```haskell top:3
     let middle pp = pp !! (length pp `div` 2)
     let rulesMap = mkRulesAfter rules
-    print $ sum $ map (_unPage . middle) $ filter (isValid rulesMap) updates
+    let (valid,invalid) = partition (isValid rulesMap) updates
+    print $ sum $ map (_unPage . middle) valid
+```
+
+## Part 2
+
+Now we need to repair the invalid updates and print the sum of their middle elements.
+
+```haskell top:3
+    print $ sum $ map (_unPage . middle) $ repair rulesMap <$> invalid
+```
+
+I'm not sure if it will be exercised by the input, but nothing in the problem description
+prevents the rules from having cycles. It just prohibits cycles with respect to the pages
+in any individual update.
+
+So to repair the update, we first prune the rules to only those relevant to the update.
+
+```haskell
+pruneRules :: RulesMap -> [Page] -> RulesMap
+pruneRules rulesMap update =
+    M.restrictKeys rulesMap updateSet
+        & M.map (S.intersection updateSet)
+        & M.filter (not . S.null)
+  where
+    updateSet = S.fromList update
+```
+
+This pruned rulesMap will not have cycles.
+
+Now we assign an ordering value to each key of this map that is one less than
+the minimum ordering value of any of the pages that must come after that key.
+Pages that have nothing that must come after them get the value zero (the
+highest value).
+
+Note #1: The reason for the increasingly negative numbers is so that the final
+sort order will be non-decreasing.
+
+Note #2: The computation of `valueMap` must be lazy.
+
+```haskell
+mkValueMap prunedMap =
+    valueMap
+  where
+    valueMap = M.map (pred . minimum . map get . S.toList) prunedMap
+    get k = M.findWithDefault 0 k valueMap
+```
+
+Now we just sort the update by each page's value.
+
+```haskell
+repair rulesMap update =
+    sortBy (comparing get) update
+  where
+    valueMap = mkValueMap $ pruneRules rulesMap update
+    get k = M.findWithDefault 0 k valueMap
 ```
 
 ## Module header and imports
 
 ```haskell top
 module Main where
-import Data.Map.Strict ( Map )
-import Data.Set        ( Set )
-import qualified Data.Map.Strict as M
-import qualified Data.Set        as S
+import Data.Map ( Map )
+import Data.Set ( Set )
+import qualified Data.Map as M
+import qualified Data.Set as S
 ```
