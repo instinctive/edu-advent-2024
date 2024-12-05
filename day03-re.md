@@ -20,7 +20,7 @@ main = do
 
 We're going to grab the `mul(X,Y)` entries with a regexp.
 
-```haskell
+```haskell top:1
 re_mul = [re|mul\((\d{1,3}),(\d{1,3})\)|]
 ```
 
@@ -42,7 +42,7 @@ The genius idea of my friend Pomme was to use `re.split(regex)`
 to split the input on `don't()`/`do()` pairs.
 Note that this needs to be a non-greedy match.
 
-```haskell
+```haskell top:1
 re_dontdo = [re|don't\(\).*?($|do\(\))|]
 ```
 
