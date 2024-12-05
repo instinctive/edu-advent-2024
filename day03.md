@@ -1,5 +1,7 @@
 # [Day 3](https://adventofcode.com/2024/day/3)
 
+[I like the regex solution better](day03-re.md).
+
 The input is the file contents.
 
 ```haskell top:2

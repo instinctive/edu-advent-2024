@@ -1,7 +1,8 @@
-# [Day 3 using RegEx](https://adventofcode.com/2024/day/3)
+# [Day 3 using regex](https://adventofcode.com/2024/day/3)
+
+[My original solution](day03.md).
 
 I was taken by the elegance the regex-based solutions my friends did in Python.
-So here's an attempt in Haskell.
 
 The input is the file contents.
 To avoid any issues with multi-line regex matching,
