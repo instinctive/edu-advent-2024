@@ -4,7 +4,8 @@
 [[Day 2](day02.md)]
 [[Day 3](day03.md)]
 [[Day 4](day04.md)]
-bonus [[Day 3 regex](day03-re.md)]
+[[Day 5](day05.md)]
+plus bonus [[Day 3 regex](day03-re.md)]
 
 I'm experimenting with a "literate haskell" style, using
 [`markdown-unlit`](https://github.com/sol/markdown-unlit).  This is a very
