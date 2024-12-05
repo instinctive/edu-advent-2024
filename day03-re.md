@@ -1,6 +1,6 @@
 # [Day 3 using regex](https://adventofcode.com/2024/day/3)
 
-[My original solution](day03.md).
+[I like this better than my original solution](day03.md).
 
 I was taken by the elegance the regex-based solutions my friends did in Python.
 
