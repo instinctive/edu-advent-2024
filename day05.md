@@ -71,7 +71,7 @@ Now we need to repair the invalid updates and print the sum of their middle elem
 ```
 
 I'm not sure if it will be exercised by the input, but nothing in the problem description
-prevents the rules from having cycles. It just prohibits cycles with respect to the pages
+prevents the rules from having cycles. It only prohibits cycles with respect to the pages
 in any individual update.
 
 So to repair the update, we first prune the rules to only those relevant to the update.
@@ -107,7 +107,7 @@ mkValueMap prunedMap =
     get k = M.findWithDefault 0 k valueMap
 ```
 
-Now we just sort the update by each page's value.
+Finally, to repair the update we sort by each page's value.
 
 ```haskell
 repair rulesMap update =
