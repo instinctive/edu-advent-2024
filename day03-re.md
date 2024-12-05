@@ -29,6 +29,7 @@ re_mul = [re|mul\((\d{1,3}),(\d{1,3})\)|]
 ```
 
 We need to convert each match into an $x*y$ product.
+(Note documentation of [`scan`](https://hackage.haskell.org/package/pcre-heavy-1.0.0.2/docs/Text-Regex-PCRE-Heavy.html#v:scan).)
 
 ```haskell
 getMul (_,xy) = product $ read @Int <$> xy
