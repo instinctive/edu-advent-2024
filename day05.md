@@ -100,6 +100,7 @@ highest value). Two notes:
   case being the zero-valued pages.
 
 ```haskell
+mkValueMap :: RulesMap -> Map Page Int
 mkValueMap prunedMap =
     valueMap
   where
@@ -110,6 +111,7 @@ mkValueMap prunedMap =
 Finally, to repair the update we sort by each page's value.
 
 ```haskell
+repair :: RulesMap -> [Page] -> [Page]
 repair rulesMap update =
     sortBy (comparing get) update
   where
