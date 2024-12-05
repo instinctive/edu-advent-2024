@@ -7,10 +7,13 @@ common shared
     , base hiding (Prelude)
     , base-prelude (BasePrelude as Prelude)
   default-language: GHC2021
+  default-extensions:
+    , LambdaCase
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
     , containers
     , mtl
+    , pcre-heavy
     , text
 
 executable day01
@@ -24,6 +27,10 @@ executable day02
 executable day03
   import: shared
   main-is: day03.lhs
+
+executable day03-re
+  import: shared
+  main-is: day03-re.lhs
 
 executable day04
   import: shared
