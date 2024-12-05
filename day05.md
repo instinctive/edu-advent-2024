@@ -96,7 +96,8 @@ highest value). Two notes:
 * The reason for the increasingly negative numbers is so that the final sort
   order will be non-decreasing.
 
-* The computation of the value map is lazy.
+* The computation of the value map is recursive and thus lazy, with the base
+  case being the zero-valued pages.
 
 ```haskell
 mkValueMap prunedMap =
