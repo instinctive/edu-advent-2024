@@ -4,15 +4,19 @@
 
 I was taken by the elegance the regex-based solutions my friends did in Python.
 
-The input is the file contents.
 To avoid any issues with multi-line regex matching,
 we convert all newlines to spaces.
+
+```haskell
+unline '\n' = ' '
+unline c = c
+```
+
+The input is the file contents, with newlines converted.
 
 ```haskell top:2
 main :: IO ()
 main = do
-    let unline '\n' = ' '
-        unline c = c
     input <- map unline <$> getContents
 ```
 
