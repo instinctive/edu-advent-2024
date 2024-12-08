@@ -8,6 +8,7 @@
 plus bonus [[Day 3 regex](day03-re.md)]
 <br/>
 [[Day 6](day06.md)]
+[[Day 7](day07.md)]
 
 I'm experimenting with a "literate haskell" style, using
 [`markdown-unlit`](https://github.com/sol/markdown-unlit).  This is a very
