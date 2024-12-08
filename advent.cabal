@@ -8,10 +8,13 @@ common shared
     , base-prelude (BasePrelude as Prelude)
   default-language: GHC2021
   default-extensions:
+    , BlockArguments
     , LambdaCase
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
+    , array
     , containers
+    , linear
     , mtl
     , pcre-heavy
     , text
