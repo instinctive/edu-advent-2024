@@ -42,7 +42,7 @@ ccat x y =
     (m:_) = dropWhile (<=y) $ iterate (*10) 1
 ```
 
-We're just goint to copy and paste the rest of Part 1.
+We're just going to copy and paste the rest of Part 1.
 
 ```haskell
 solvable2 (v:x:yy) =
