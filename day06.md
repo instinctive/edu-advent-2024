@@ -124,11 +124,29 @@ hasLoop = go S.empty where
 The only candidate positions for a new obstacle are the positions the guard
 is already visiting. The start position is exempted.
 
-```haskell top:3 ignore
+```haskell top:3
     let cands = S.delete start uniq
 ```
 
+We modify the `terrain` function to add an obstacle at a candidate position.
 
+```haskell top:3
+    let mkTerrain obstacle pos
+            | pos == obstacle = Blocked
+            | otherwise = terrain pos
+```
+
+The candidate *paths* are calculated with respect to a candidate obstacle.
+
+```haskell top:3
+    let candPaths = flip guardPath (start,North) . mkTerrain <$> S.toList cands
+```
+
+Finally, the answer is the number of those paths that have a loop:
+
+```haskell top:3
+    print $ length $ filter hasLoop candPaths
+```
 
 ## Module header and imports
 
