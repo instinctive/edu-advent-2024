@@ -13,7 +13,7 @@ main = do
 
 I feel an exponential blowup coming, but let's try just inserting the operators
 and see what happens. This function checks to see whether an equation is
-solvable.
+solvable by trying both possible operators for each additional argument.
 
 ```haskell
 solvable (v:x:yy) =
