@@ -136,13 +136,13 @@ We modify the `terrain` function to add an obstacle at a candidate position.
             | otherwise = terrain pos
 ```
 
-The candidate *paths* are calculated with respect to a candidate obstacle.
+The candidate paths are calculated with respect to a candidate obstacle.
 
 ```haskell top:3
     let candPaths = flip guardPath (start,North) . mkTerrain <$> S.toList cands
 ```
 
-Finally, the answer is the number of those paths that have a loop:
+Finally, the answer is the number of those paths that have a loop.
 
 ```haskell top:3
     print $ length $ filter hasLoop candPaths
