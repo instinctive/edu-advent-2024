@@ -45,12 +45,6 @@ delta = \case
     n = -1; s = 1; w = -1; e = 1
 ```
 
-The guard is represented as a position and a direction.
-
-```haskell top:1
-type Guard = (Pos,Dir)
-```
-
 ## Parsing
 
 We parse the input lines into a grid while also grabbing the position of the guard.
