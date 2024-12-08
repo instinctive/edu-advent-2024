@@ -20,11 +20,7 @@ Find the positions of each emitter.
             , x /= '.' ]
 ```
 
-Find the positions of each emitter's antinodes.
-
-```haskell top:3
-    let antinodes = M.map (getAntinodes bounds) emitters
-```
+## Part 1
 
 Each pair of emitters gives two antinodes.
 We keep only those that are on the map.
@@ -36,11 +32,11 @@ getAntinodes bounds positions = filter (inRange bounds) $ concat
     , b <- aa ]
 ```
 
-## Part 1
-
+Find the positions of each emitter's antinodes.
 The answer is the number of unique antinodes.
 
 ```haskell top:3
+    let antinodes = M.map (getAntinodes bounds) emitters
     print $ S.size . S.fromList . concat . M.elems $ antinodes
 ```
 
