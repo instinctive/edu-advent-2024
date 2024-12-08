@@ -12,12 +12,20 @@ main = do
 ## Grid representation
 
 The grid is represented as an array from 2D vector positions to terrain.
-There are two kinds of terrain: open and blocked.
+The terrain at any position can be out of bounds, open, or blocked.
 
 ```haskell top:1
-data Terrain = Open | Blocked deriving (Eq,Ord,Show)
+data Terrain = OOB | Open | Blocked deriving (Eq,Ord,Show)
 type Pos  = V2 Int
 type Grid = Array Pos Terrain
+```
+
+The `terrain` function reports the terrain at a given position,
+and handles the case where the position is off the map.
+
+```haskell top:3
+    let terrain pos | not (inRange (bounds grid) pos) = OOB
+        terrain pos = grid!pos
 ```
 
 We will be working with cardinal directions in this problem.
@@ -79,7 +87,7 @@ The answer is the number of unique positions the guard occupies before leaving
 the mapped area.
 
 ```haskell top:3
-    let uniq = S.fromList $ fst <$> guardPath grid (start,North)
+    let uniq = S.fromList $ fst <$> guardPath terrain (start,North)
     print $ S.size uniq
 ```
 
@@ -93,16 +101,25 @@ The guard's path. The guard attempts to move forward.
 When the guard is blocked, it turns to the right.
 
 ```haskell
-guardPath :: Grid -> Guard -> [Guard]
-guardPath grid = go where
-    go guard@(curr,dir)
-        | not $ inRange (bounds grid) next = [guard]
-        | grid ! next == Blocked = go (curr, turnRight dir)
-        | otherwise = guard : go (next,dir)
+guardPath :: (Pos -> Terrain) -> Guard -> [Guard]
+guardPath terrain = go where
+    go guard@(curr,dir) = case terrain next of
+        OOB     -> [guard]
+        Open    -> guard : go (next,dir)
+        Blocked -> go (curr, turnRight dir)
       where next = curr + delta dir
 ```
 
 ## Part 2
+
+We will be looking for paths that have a loop.
+
+```haskell
+hasLoop :: [Guard] -> Bool
+hasLoop = go S.empty where
+    go _ [] = False
+    go s (g:gg) = S.member g s || go (S.insert g s) gg
+```
 
 The only candidate positions for a new obstacle are the positions the guard
 is already visiting. The start position is exempted.
@@ -110,6 +127,8 @@ is already visiting. The start position is exempted.
 ```haskell top:3 ignore
     let cands = S.delete start uniq
 ```
+
+
 
 ## Module header and imports
 
