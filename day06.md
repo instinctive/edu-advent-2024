@@ -73,27 +73,42 @@ parseTerrain (pos,x) = case x of
     x -> error $ "invalid map character: " <> show x
 ```
 
-# Part 1
+## Part 1
 
 The answer is the number of unique positions the guard occupies before leaving
 the mapped area.
 
 ```haskell top:3
-    let uniq = S.fromList $ guardPath grid start North
+    let uniq = S.fromList $ fst <$> guardPath grid (start,North)
     print $ S.size uniq
+```
+
+The guard's status is a position and direction pair.
+
+```haskell top:1
+type Guard = (Pos,Dir)
 ```
 
 The guard's path. The guard attempts to move forward.
 When the guard is blocked, it turns to the right.
 
 ```haskell
-guardPath :: Grid -> Pos -> Dir -> [Pos]
+guardPath :: Grid -> Guard -> [Guard]
 guardPath grid = go where
-    go curr dir
-        | not $ inRange (bounds grid) next = [curr]
-        | grid ! next == Blocked = go curr (turnRight dir)
-        | otherwise = curr : go next dir
+    go guard@(curr,dir)
+        | not $ inRange (bounds grid) next = [guard]
+        | grid ! next == Blocked = go (curr, turnRight dir)
+        | otherwise = guard : go (next,dir)
       where next = curr + delta dir
+```
+
+## Part 2
+
+The only candidate positions for a new obstacle are the positions the guard
+is already visiting. The start position is exempted.
+
+```haskell top:3 ignore
+    let cands = S.delete start uniq
 ```
 
 ## Module header and imports
