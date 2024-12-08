@@ -29,6 +29,35 @@ The answer is the sum of the values of the solvable equations.
     print $ sum $ map head $ filter solvable equations
 ```
 
+## Part 2
+
+The new concatenation operator. Textual concatenation of two decimal numbers is
+like multiplying the first number by first power of ten greater than the second
+number (to shift the first number over), and then adding the second number.
+
+```haskell
+ccat x y =
+    x * m + y
+  where
+    (m:_) = dropWhile (<=y) $ iterate (*10) 1
+```
+
+We're just goint to copy and paste the rest of Part 1.
+
+```haskell
+solvable2 (v:x:yy) =
+    go x yy
+  where
+    go x [] = x == v
+    go x (y:yy) = go (x+y) yy || go (x*y) yy || go (ccat x y) yy
+```
+
+The answer is the sum of the values of the solvable equations.
+
+```haskell top:3
+    print $ sum $ map head $ filter solvable2 equations
+```
+
 ## Module header and imports
 
 ```haskell top
