@@ -79,7 +79,8 @@ The answer is the number of unique positions the guard occupies before leaving
 the mapped area.
 
 ```haskell top:3
-    print $ S.size . S.fromList $ guardPath grid start North
+    let uniq = S.fromList $ guardPath grid start North
+    print $ S.size uniq
 ```
 
 The guard's path. The guard attempts to move forward.
