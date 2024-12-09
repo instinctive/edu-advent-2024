@@ -9,14 +9,17 @@ common shared
   default-language: GHC2021
   default-extensions:
     , BlockArguments
+    , DataKinds
     , LambdaCase
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
     , array
     , containers
+    , lens
     , linear
     , mtl
     , pcre-heavy
+    , tagged
     , text
 
 executable day01
