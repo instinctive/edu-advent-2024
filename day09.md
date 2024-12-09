@@ -145,7 +145,7 @@ attempt (oldpos, (id,filesize)) = do
 
 Now we can do the actual move.
 We delete the free space block from its map.
-Then me delete the file from its map and reinsert in the position
+Then we delete the file from its map and reinsert in the position
 formerly held by the free space.
 Then we check to see if there's any extra free space.
 If there is, we insert it after the moved file.
