@@ -7,6 +7,7 @@ common shared
     , base hiding (Prelude)
     , base-prelude (BasePrelude as Prelude)
   default-language: GHC2021
+  hs-source-dirs: src
   default-extensions:
     , BlockArguments
     , DataKinds
