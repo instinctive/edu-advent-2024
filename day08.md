@@ -33,11 +33,17 @@ getAntinodes bounds positions = filter (inRange bounds) $ concat
 ```
 
 Find the positions of each emitter's antinodes.
-The answer is the number of unique antinodes.
+Then put all the antinodes from all the emitters into a set.
+The answer is the size of that set.
+
+```haskell
+solve get = S.size . S.fromList . concat . M.elems . M.map get
+```
+
+The answer to part 1.
 
 ```haskell top:3
-    let antinodes = M.map (getAntinodes bounds) emitters
-    print $ S.size . S.fromList . concat . M.elems $ antinodes
+    print $ solve (getAntinodes bounds) emitters
 ```
 
 ## Module header and imports
