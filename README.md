@@ -1,6 +1,6 @@
 # Advent of Code 2024
 
-[Day 1](src/day01.md),
+[`Day 1`](src/day01.md),
 [Day 2](src/day02.md),
 [Day 3](src/day03.md),
 [Day 4](src/day04.md),
