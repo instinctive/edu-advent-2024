@@ -1,4 +1,4 @@
-# [Day 1](https://adventofcode.com/2024/day/1)
+# [Day 1](https://adventofcode.com/2024/day/1)[➡️D](https://adventofcode.com/2024/day/2)
 
 The input to this problem are two lists given pair by pair over `n` lines.
 
