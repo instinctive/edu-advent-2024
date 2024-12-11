@@ -35,7 +35,19 @@ adjacent ary pos = mapMaybe (get . (+pos)) deltas where
 deltas = [ V2 1 0, V2 (-1) 0, V2 0 1, V2 0 (-1) ]
 ```
 
-All peaks have exactly one trail, represented as its own position.
+We're going to define `terrainAt`, which returns the height and the trails
+at a position, given the terrain array.
+
+```haskell
+terrainAt :: Terrain -> Pos -> Int -> (Int,[Pos])
+```
+
+We're going to use this function, which requires the terrain array,
+to build the terrain array itself. How is this possible? We can do this because the `Array`
+type is lazy.
+
+The "base case" for this lazy recursive data structure are the peaks.
+All peaks have exactly one trail: their own positions.
 
 ```haskell
 terrainAt ary pos 9 = (9,[pos])
