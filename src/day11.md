@@ -117,10 +117,19 @@ traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
 map      ::                  (a ->   b) -> [a] ->   [b]
 ```
 
-Now we can add the memoization to get the answer to part 2.
+The point of factoring out the recursion in `countStoneA`
+is so that we can have the recursive call be to `memo` instead.
+But `memo` itself needs a recursive argument,
+which is where `fix` comes in again.
 
 ```haskell top:3
     let part2 = fix (memo . countStoneA) . (75,)
+```
+
+This is a recursive version of `countStoneA` that does memoization.
+Now we can get the answer to part 2!
+
+```haskell top:3
     print $ flip evalState M.empty $ sum <$> traverse part2 input
 ```
 
