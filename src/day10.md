@@ -8,7 +8,7 @@ main = do
     input <- map (map digitToInt) . lines <$> getContents
 ```
 
-We then turn this input into a terrain array.
+We then turn this input into a terrain array, as explained below.
 
 ```haskell top:3
     let terrain = mkTerrain input
@@ -47,7 +47,7 @@ to build the terrain array itself. How is this possible? We can do this because 
 type is lazy.
 
 The "base case" for this lazy recursive data structure are the peaks.
-All peaks have exactly one trail: their own positions.
+Each peak has exactly one trail: its own position.
 
 ```haskell
 terrainAt ary pos 9 = (9,[pos])
