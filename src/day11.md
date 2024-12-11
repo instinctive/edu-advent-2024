@@ -137,7 +137,7 @@ Now we can get the answer to part 2!
 
 ```haskell top
 module Main where
-import Control.Monad.State ( MonadState, State, evalState, gets, modify' )
+import Control.Monad.State ( MonadState, evalState, gets, modify' )
 import Data.Map.Strict ( Map )
 import qualified Data.Map.Strict as M
 ```
