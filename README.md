@@ -1,19 +1,19 @@
 # Advent of Code 2024
 
-[[Day 1](src/day01.md)]
-[[Day 2](src/day02.md)]
-[[Day 3](src/day03.md)]
-[[Day 4](src/day04.md)]
-[[Day 5](src/day05.md)]
-plus bonus [[Day 3 regex](src/day03-re.md)]
+[Day 1](src/day01.md),
+[Day 2](src/day02.md),
+[Day 3](src/day03.md),
+[Day 4](src/day04.md),
+[Day 5](src/day05.md)
+plus bonus [Day 3 regex](src/day03-re.md)
 <br/>
-[[Day 6](src/day06.md)]
-[[Day 7](src/day07.md)]
-[[Day 8](src/day08.md)]
-[[Day 9](src/day09.md)]
-[[Day 10](src/day10.md)]
+[Day 6](src/day06.md),
+[Day 7](src/day07.md),
+[Day 8](src/day08.md),
+[Day 9](src/day09.md),
+[Day 10](src/day10.md)
 <br/>
-[[Day 11](src/day11.md)]
+[Day 11](src/day11.md)
 
 I'm experimenting with a "literate haskell" style, using
 [`markdown-unlit`](https://github.com/sol/markdown-unlit).  This is a very
