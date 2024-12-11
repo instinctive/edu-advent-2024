@@ -5,16 +5,16 @@ We parse the input into a list of lists of heights (integers).
 ```haskell top:3
 main :: IO ()
 main = do
-    rows@(row:_) <- map (map digitToInt) . lines <$> getContents
+    input <- map (map digitToInt) . lines <$> getContents
 ```
 
 We then turn this input into a terrain array.
 
 ```haskell top:3
-    let terrain = mkTerrain rows
+    let terrain = mkTerrain input
 ```
 
-## The trail array
+## The terrain array
 
 We represent positions as 2D vectors, and the terrain as
 an array from positions to heights and trails, where each
@@ -49,9 +49,10 @@ terrainAt ary pos h = (h,trails) where
     trails = concat [ tt | (h',tt) <- adjacent ary pos, h+1 == h' ]
 ```
 
-We can now create the terrain array from the input rows.
+We can now create the terrain array from the input.
 
 ```haskell
+mkTerrain :: [[Int]] -> Terrain
 mkTerrain rows@(row:_) = ary where
     nrows = length rows
     ncols = length row
@@ -63,7 +64,7 @@ mkTerrain rows@(row:_) = ary where
 
 ## Part 1
 
-For part 1, we are only interested in how many different peaks are reachable
+For part 1, we want to know how many different peaks are reachable
 from each trailhead.
 
 ```haskell top:3
