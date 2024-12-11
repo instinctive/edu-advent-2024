@@ -16,10 +16,10 @@ words, the calculation will experience exponential blowup as $n$ gets large.
 But for part 1 maybe we can get away with the simple solution,
 and we'll build on it for the inevitable part 2.
 
-The most interesting part of the blink is when a stone splits. We do this by
+The most interesting part of the blink is when a stone splits. We handle this by
 looking for the first power of 10 that is greater than the stone. If that power
 is even, then the stone has an even number of digits, and we can split it by
-taking quotient and remainder of the stone with respect to *half* that power.
+taking the quotient and remainder of the stone with respect to *half* that power.
 
 ```haskell
 maybeSplit stone
@@ -31,26 +31,22 @@ maybeSplit stone
 
 *Observation*: We don't need to keep recreating the line of stones.
 For each stone, we're only interested in how many stones it will become
-over the course of $n$ blinks. So we can just count them.
+over the course of $n$ blinks. So we can count them directly.
 
-Let us assume that we count *down* the number of blinks, $n$. Then
-when $n=0$ the stone "becomes" one stone (itself).
-
-```haskell
-countStone (0,_) = 1
-```
-
+Let us assume that we count *down* the number of blinks, $n$.
+When $n=0$ the stone "becomes" one stone (itself).
 If $n>0$, then we need to recursively count the number of stones
 after this blink, decrementing $n$.
 
 ```haskell
+countStone (0,_) = 1
 countStone (n,0) = countStone (n-1,1)
 countStone (n,s) = case maybeSplit s of
     Nothing    -> countStone (n-1,s*2024)
     Just (q,r) -> countStone (n-1,q) + countStone (n-1,r)
 ```
 
-The answer is just the sum of `countStone` on the input stones,
+The answer is the sum of `countStone` on the input stones,
 where we specify 25 blinks for each.
 
 ```haskell top:3
@@ -63,8 +59,8 @@ where we specify 25 blinks for each.
 It turns out the simple, exponential solution works fine for the 25 blinks of part 1 but
 not the 75 blinks of part 2, as expected.
 
-Our first instinct should be that we're probably repeating ourselves a lot in
-this 75-layer binary tree.  What we'd like to do is just look up the solution
+Our instinct should be that we're probably repeating ourselves a lot in
+this 75-layer binary tree.  What we'd like to do is look up the solution
 if we've already calculated it.  This calls for a memoized function.
 
 ```haskell
@@ -75,8 +71,10 @@ memo f k = gets (M.lookup k) >>= flip maybe pure do
     pure v
 ```
 
-This function will try to look up the key $k$ in the map managed by the state
-monad, or call $f k$ if it's not there to find it.
+This function is not specific the this Advent of Code problem.
+
+It will try to look up the key $k$ in the map managed by the state monad,
+or call $f k$ if it's not there, thereafter inserting it into the map.
 
 Now we need to rewrite `countStone` with the recursion factored out, and in
 an applicative style. Compare this with the previous version!
@@ -90,7 +88,8 @@ countStoneA f (n,s) = case maybeSplit s of
 ```
 
 The only differences are that the recursive calls are replaced with calls to $f$,
-and the addition in the split case has been lifted into the applicative.
+and the addition operation when we split a stone in two has been lifted into
+the applicative context.
 
 When we factor out recursion like this, we can get the recursive function
 back using the
@@ -107,8 +106,15 @@ to supply a very simple such context,
 and make the same (exponential) calculation of part 1.
 
 ```haskell top:3
-    let part1' = runIdentity . fix countStoneA . (25,)
-    print $ sum $ map part1' input
+    let part1' = fix countStoneA . (25,)
+    print $ runIdentity $ sum <$> traverse part1' input
+```
+
+Note that `traverse` is the applicative version of `map`.
+
+```haskell ignore
+traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
+map      ::                  (a ->   b) -> [a] ->   [b]
 ```
 
 Now we can add the memoization to get the answer to part 2.
