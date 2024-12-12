@@ -12,6 +12,7 @@ common shared
     , BlockArguments
     , DataKinds
     , LambdaCase
+    , RecordWildCards
   ghc-options: -pgmL markdown-unlit
   build-depends: base, base-prelude
     , array
