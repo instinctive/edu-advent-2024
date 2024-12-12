@@ -119,7 +119,7 @@ the position will be exactly one step away from the previous fence.
 countFences (S.toList -> (start:more)) = go start more where
     go _ [] = 1
     go (Fence dir pos) (next@(Fence dir' pos'):more)
-        | dir == dir' && pos + step dir == pos' = go next more
+        | dir == dir' && pos + walk dir == pos' = go next more
         | otherwise = 1 + go next more
 ```
 
@@ -127,26 +127,10 @@ If we are walking along a fence to the north or south, we are stepping east.
 If we are walking along a fence to the east or west, we are stepping south.
 
 ```haskell
-    step N = delta E
-    step S = delta E
-    step E = delta S
-    step W = delta S
-```
-
-## Directions and Positions
-
-Many of the Advent of Code problems require 2D reasoning.
-
-```haskell top:1
-type Pos = V2 Int
-data Dir = N | E | S | W deriving (Eq,Ord,Show)
-
-delta N = V2 (-1) 0
-delta S = V2 ( 1) 0
-delta W = V2 0 (-1)
-delta E = V2 0 ( 1)
-
-deltas = ((,) <*> delta) <$> [N,E,S,W]
+    walk N = step E
+    walk S = step E
+    walk E = step S
+    walk W = step S
 ```
 
 ## Orthogonal neighbors
@@ -156,57 +140,17 @@ we want to hold on to the offmap neighbors for the fence calcutions.
 
 ```haskell
 ortho ary pos =
-    partition ((inRange $ bounds ary).snd) $
-    second (+pos) <$> deltas
-```
-
-## Read an array
-
-This is common in Advent of Code. This function takes two arguments: `mkLine`
-converts the input `String` into `[a]`, where the `a` are the raw elements, and
-`mkElem` builds the actual elements of the array.
-
-```haskell
-getArray mkLine mkElem = do
-    rows@(row:_) <- map mkLine . lines <$> getContents
-    let nrows = length rows
-    let ncols = length row
-    let ary = listArray (1, V2 nrows ncols)
-            [ mkElem ary (V2 r c) x
-            | (r,row) <- zip [1..] rows
-            , (c,x)   <- zip [1..] row ]
-    pure ary
-```
-
-It is common that we want the raw element to be the array element.
-
-```haskell
-getArrayRaw mkLine = getArray mkLine \_ _ x -> x
-```
-
-## Depth-first search
-
-Depth-first search in a monadic context.
-
-```haskell
-dfsM :: Monad m => [a] -> (a -> m [a]) -> m ()
-dfsM xx f = go xx where
-    go [] = pure ()
-    go (x:xx) = f x >>= go . (<>xx)
+    partition inbounds neighbors
+  where
+    inbounds (_,pos) = inBounds ary pos
+    neighbors = zip allDirs $ (+pos) . step <$> allDirs
 ```
 
 ## Module header and imports
 
 ```haskell top
 module Main where
-import Control.Monad.ST
-import Data.Array.IArray
-import Data.Array.ST
-import Data.Array.Unboxed
-import Data.Map.Strict ( Map )
-import Data.Set ( Set )
-import Linear.V2
-import Control.Monad.State
+import Advent
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 ```
