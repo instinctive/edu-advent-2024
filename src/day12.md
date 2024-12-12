@@ -1,7 +1,7 @@
 # [Day 12](https://adventofcode.com/2024/day/12)
 
-[Read the array](lib/Advent.md#read-an-array) of plants, [find the
-regions](#find-the-regions), and print the answers.
+[Read the array](../lib/Advent.md#read-an-array) of plants,
+[find the regions](#find-the-regions), and print the answers.
 
 ```haskell top:3
 main = do
@@ -68,8 +68,8 @@ This is where all the action is.
 
 We create a new boolean array to tell us if we've visited a position, and then
 from every unvisited position we create a new region $k$ for that plant $c$ and
-do a [depth-first search](lib/Advent.md#depth-first-search) to find all the other positions
-that comprise that region.
+do a [depth-first search](../lib/Advent.md#depth-first-search) to find all the
+other positions that comprise that region.
 
 ```haskell
 mkRegions plants = runST do
