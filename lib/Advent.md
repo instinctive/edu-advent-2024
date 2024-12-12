@@ -34,6 +34,21 @@ step W = V2 0 (-1)
 step E = V2 0 ( 1)
 ```
 
+## Read lists of integers
+
+Very common input format.
+
+```haskell
+getIntLists = do
+    map stringToInts . lines <$> getContents
+```
+
+This is probably worth having separately.
+
+```haskell
+stringToInts = map (read @Int) . words
+```
+
 ## Read an array
 
 This function takes two arguments: `mkLine` converts the input `String` into

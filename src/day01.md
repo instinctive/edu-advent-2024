@@ -9,8 +9,7 @@ Finally, we sort both lists.
 ```haskell
 main :: IO ()
 main = do
-    let parse = map (read @Int) . words
-    [aa,bb] <- map sort . transpose . map parse . lines <$> getContents
+    [aa,bb] <- map sort . transpose <$> getIntLists
 ```
 
 ## Part 1
@@ -40,5 +39,6 @@ count, and sum those values.
 
 ```haskell top
 module Main where
+import Advent
 import qualified Data.Map.Strict as M
 ```
