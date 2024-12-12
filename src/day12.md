@@ -59,8 +59,7 @@ When we add fences to a region, we also bump the area by one.
 ```haskell top:1
 addFences fences Region{..} = Region
     (succ _regionArea)
-    (S.union (S.fromList $ mk <$> fences) _regionFences)
-  where mk (dir,pos) = Fence dir pos
+    (S.union (S.fromList $ uncurry Fence <$> fences) _regionFences)
 ```
 
 ## Find the Regions
@@ -88,9 +87,9 @@ mkRegions plants = runST do
 Having found an unvisited position in region $k$, we mark it as visited and
 then take a look in all the [orthogonal neighbors](#orthogonal-neighbors). Some
 may be off the map, and some may not have the same plant. These will be fences
-round the region, which we add to the region.
+around the region.
 
-Adjacent positions that are on the map and have the same plant are also part of
+Adjacent positions that are on the map and have the same plant are part of
 this region, so we return them as the next positions to explore in the
 depth-first search.
 
@@ -113,7 +112,7 @@ When the depth-first search is done, we return the regions stored in the map.
 ## Contiguous fences
 
 We go down the list of fences. Whenever the next fence is not contiguous, we
-add one the the count. A contiguous fence will be in the same direction, and
+add one to the count. A contiguous fence will be in the same direction, and
 the position will be exactly one step away from the previous fence.
 
 ```haskell
