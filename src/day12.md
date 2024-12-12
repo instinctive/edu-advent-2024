@@ -124,8 +124,8 @@ countFences (S.toList -> (start:more)) = go start more where
         | otherwise = 1 + go next more
 ```
 
-If we are walking alone a fence to the north or south, we are stepping east.
-If we are walking alone a fence to the east or west, we are stepping south.
+If we are walking along a fence to the north or south, we are stepping east.
+If we are walking along a fence to the east or west, we are stepping south.
 
 ```haskell
     step N = delta E
@@ -179,7 +179,7 @@ getArray mkLine mkElem = do
     pure ary
 ```
 
-It is common that we just want the raw element to be the array element.
+It is common that we want the raw element to be the array element.
 
 ```haskell
 getArrayRaw mkLine = getArray mkLine \_ _ x -> x
