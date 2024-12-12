@@ -18,7 +18,7 @@ part1 Region{..} = _regionArea * S.size _regionFences
 ```
 
 For part 2 we multiply the area by the [count of contiguous
-fences](#contigouse-fences).
+fences](#contiguous-fences).
 
 ```haskell
 part2 Region{..} = _regionArea * countFences _regionFences
