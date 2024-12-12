@@ -1,6 +1,6 @@
 # [Day 12](https://adventofcode.com/2024/day/12)
 
-[Read the array](read-an-array) of plants, [find the
+[Read the array](#read-an-array) of plants, [find the
 regions](#find-the-regions), and print the answers.
 
 ```haskell top:3
@@ -17,7 +17,8 @@ For part 1 we multiply the area by the raw number of fences.
 part1 Region{..} = _regionArea * S.size _regionFences
 ```
 
-For part 2 we multiply the area by the [count of contiguous fences](#contigouse-fences).
+For part 2 we multiply the area by the [count of contiguous
+fences](#contigouse-fences).
 
 ```haskell
 part2 Region{..} = _regionArea * countFences _regionFences
@@ -85,7 +86,7 @@ mkRegions plants = runST do
 ```
 
 Having found an unvisited position in region $k$, we mark it as visited and
-then take a look in all the [orthogonal neighbors](orthogonal-neighbors). Some
+then take a look in all the [orthogonal neighbors](#orthogonal-neighbors). Some
 may be off the map, and some may not have the same plant. These will be fences
 round the region, which we add to the region.
 
