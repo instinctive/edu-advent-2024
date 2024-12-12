@@ -1,5 +1,7 @@
 # Advent of Code 2024
 
+[`Advent`](src/Advent.md) (shared library)
+
 [`Day 01`](src/day01.md)
 [`Day 02`](src/day02.md)
 [`Day 03`](src/day03.md)

@@ -2,12 +2,11 @@ cabal-version: 3.0
 name: advent
 version: 0.1.0.0
 
-common shared
+common lib-shared
   mixins:
     , base hiding (Prelude)
     , base-prelude (BasePrelude as Prelude)
   default-language: GHC2021
-  hs-source-dirs: src
   default-extensions:
     , BlockArguments
     , DataKinds
@@ -24,6 +23,16 @@ common shared
     , pcre-heavy
     , tagged
     , text
+
+library
+  import: lib-shared
+  hs-source-dirs: lib
+  exposed-modules: Advent
+
+common shared
+  import: lib-shared
+  hs-source-dirs: src
+  build-depends: advent
 
 executable day01
   import: shared
