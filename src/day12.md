@@ -6,7 +6,7 @@
 ```haskell top:3
 main = do
     plants <- getArrayRaw id :: IO (UArray Pos Char)
-    let regions = mkRegions plants
+    let regions = findRegions plants
     print $ sum . map part1 $ regions
     print $ sum . map part2 $ regions
 ```
@@ -72,7 +72,7 @@ search to find all the other positions that comprise that region.
 Finally, we return all the regions we have found.
 
 ```haskell
-mkRegions plants = runST do
+findRegions plants = runST do
     ary <- newArray (bounds plants) False :: ST s (STUArray s Pos Bool)
     regions <- newSTRef M.empty
     for_ (range $ bounds plants) \pos -> ifNotVisited ary pos do
