@@ -5,8 +5,8 @@ main = do
     plants <- getArray id (\_ _ x -> x) :: IO (UArray Pos Char)
     print $ solve plants
 
-dfsM :: Monad m => (a -> m [a]) -> [a] -> m ()
-dfsM f = go where
+dfsM :: Monad m => [a] -> (a -> m [a]) -> m ()
+dfsM xx f = go xx where
     go [] = pure ()
     go (x:xx) = f x >>= go . (<>xx)
 
@@ -25,27 +25,26 @@ addRegion area edges fences Region{..} = Region
 
 solve plants = runST do
     ary <- newArray (bounds plants) False :: ST s (STUArray s Pos Bool)
-    let notVisited pos = lift $ not <$> readArray ary pos
-    let setVisited pos = lift $ writeArray ary pos True
-    flip evalStateT M.empty do
-        for_ (range $ bounds plants) \pos -> notVisited pos >>= flip when do
-            let c = plants!pos
-            k <- gets M.size
-            modify' $ M.insert k $ Region 0 0 []
-            let quux pos = notVisited pos >>= bool (pure []) do
-                    setVisited pos
-                    let (onmap,offmap) = ortho plants pos
-                    let (yesplant,noplant) = partition ((==c).(plants!).snd) onmap
-                    let next = map snd yesplant
-                    let edges = 4 - length next
-                    let fences = map (second $ const pos) $ offmap <> noplant
-                    modify' $ flip M.adjust k $ addRegion 1 edges fences
-                    pure next
-            dfsM quux [pos]
-        regions <- gets M.elems
-        pure
-            ( sum . map part1 $ regions
-            , sum . map part2 $ regions )
+    let notVisited pos = not <$> readArray ary pos
+    let setVisited pos = writeArray ary pos True
+    regions <- newSTRef M.empty
+    for_ (range $ bounds plants) \pos -> notVisited pos >>= flip when do
+        let c = plants!pos
+        k <- M.size <$> readSTRef regions
+        modifySTRef' regions $ M.insert k $ Region 0 0 []
+        dfsM [pos] \pos -> notVisited pos >>= bool (pure []) do
+            setVisited pos
+            let (onmap,offmap) = ortho plants pos
+            let (yesplant,noplant) = partition ((==c).(plants!).snd) onmap
+            let next = map snd yesplant
+            let edges = 4 - length next
+            let fences = map (second $ const pos) $ offmap <> noplant
+            modifySTRef' regions $ flip M.adjust k $ addRegion 1 edges fences
+            pure next
+    rr <- M.elems <$> readSTRef regions
+    pure
+        ( sum . map part1 $ rr
+        , sum . map part2 $ rr )
 
 makeNW pos q@(dir,pos') = case dir of
     N -> (N,pos)
