@@ -3,7 +3,9 @@
 ```haskell top:3
 main = do
     plants <- getArray id (\_ _ x -> x) :: IO (UArray Pos Char)
-    print $ solve plants
+    let regions = mkRegions plants
+    print $ sum . map part1 $ regions
+    print $ sum . map part2 $ regions
 
 dfsM :: Monad m => [a] -> (a -> m [a]) -> m ()
 dfsM xx f = go xx where
@@ -18,12 +20,12 @@ data Region = Region
     , _rFences :: ![ (Dir,Pos) ]
     } deriving Show
 
-addRegion area edges fences Region{..} = Region
-    (area + _rArea)
+addToRegion edges fences Region{..} = Region
+    (succ _rArea)
     (edges + _rEdges)
     (fences <> _rFences)
 
-solve plants = runST do
+mkRegions plants = runST do
     ary <- newArray (bounds plants) False :: ST s (STUArray s Pos Bool)
     let notVisited pos = not <$> readArray ary pos
     let setVisited pos = writeArray ary pos True
@@ -39,18 +41,9 @@ solve plants = runST do
             let next = map snd yesplant
             let edges = 4 - length next
             let fences = map (second $ const pos) $ offmap <> noplant
-            modifySTRef' regions $ flip M.adjust k $ addRegion 1 edges fences
+            modifySTRef' regions $ flip M.adjust k $ addToRegion edges fences
             pure next
-    rr <- M.elems <$> readSTRef regions
-    pure
-        ( sum . map part1 $ rr
-        , sum . map part2 $ rr )
-
-makeNW pos q@(dir,pos') = case dir of
-    N -> (N,pos)
-    W -> (W,pos)
-    S -> (N,pos')
-    E -> (W,pos')
+    M.elems <$> readSTRef regions
 
 part1 Region{..} = _rArea * _rEdges
 part2 Region{..} = _rArea * n where
