@@ -67,28 +67,24 @@ addFences fences Region{..} = Region
 This is where all the action is.
 
 We create a new boolean array to tell us if we've visited a position, and then
-for every unvisited position we create a new region and do a [depth-first
-search](../lib/Advent.md#depth-first-search) to find all the other positions
-that comprise that region.
-
-For each such position, we update the region, mark that position as visited,
-and add the neighboring positions of the region to the depth-first search.
-
+for every unvisited position we create a new region and do a depth-first
+search to find all the other positions that comprise that region.
 Finally, we return all the regions we have found.
 
 ```haskell
 mkRegions plants = runST do
     ary <- newArray (bounds plants) False :: ST s (STUArray s Pos Bool)
     regions <- newSTRef M.empty
-    for_ (range $ bounds plants) \pos -> ifVisited ary pos () do
+    for_ (range $ bounds plants) \pos -> ifNotVisited ary pos do
         info <- addRegion regions plants pos
-        dfsM [pos] \pos -> ifVisited ary pos [] do
-            next <- updateRegion regions plants pos info
-            markVisited ary pos
-            pure next
+        let dfs pos = ifNotVisited ary pos do
+                next <- updateRegion regions plants pos info
+                markVisited ary pos
+                traverse_ dfs next
+        dfs pos
     M.elems <$> readSTRef regions
 
-ifVisited ary pos x e = readArray ary pos >>= bool (pure x) e . not
+ifNotVisited ary pos e = readArray ary pos >>= \b -> when (not b) e
 markVisited ary pos = writeArray ary pos True
 ```
 
@@ -104,11 +100,11 @@ addRegion regions plants pos = do
 
 For each position in the region, look at all its
 [orthogonal neighbors](#orthogonal-neighbors).
-Those that are off the map or have a different plant will mark a fence
+Those that are off the map or have a different plant will comprise a fence
 around the region. All fences are added to the region.
 
-Those neighbors that are on the map and have the same plant
-are part of the region.
+The neighbors that are on the map and have the same plant are returned
+as they are part of the same region.
 
 ```haskell
 updateRegion regions plants pos (k,c) = do

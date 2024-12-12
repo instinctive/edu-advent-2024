@@ -58,17 +58,6 @@ It is common that we want the raw element to be the array element.
 getArrayRaw mkLine = getArray mkLine \_ _ x -> x
 ```
 
-## Depth-first search
-
-Depth-first search in a monadic context.
-
-```haskell
-dfsM :: Monad m => [a] -> (a -> m [a]) -> m ()
-dfsM xx f = go xx where
-    go [] = pure ()
-    go (x:xx) = f x >>= go . (<>xx)
-```
-
 ## Module header and imports
 
 ```haskell top
