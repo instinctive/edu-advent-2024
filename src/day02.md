@@ -6,8 +6,7 @@ each report is a list of integers:
 ```haskell top:2
 main :: IO ()
 main = do
-    let parse = map (read @Int) . words
-    reports <- map parse . lines <$> getContents
+    reports <- getIntLists
 ```
 
 ## Part 1
@@ -50,4 +49,5 @@ And we can pass a report if any of these "dampened reports" pass:
 
 ```haskell top
 module Main where
+import Advent
 ```
