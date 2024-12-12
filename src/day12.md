@@ -67,53 +67,66 @@ addFences fences Region{..} = Region
 This is where all the action is.
 
 We create a new boolean array to tell us if we've visited a position, and then
-from every unvisited position we create a new region $k$ for that plant $c$ and
-do a [depth-first search](../lib/Advent.md#depth-first-search) to find all the
-other positions that comprise that region.
+for every unvisited position we create a new region and do a [depth-first
+search](../lib/Advent.md#depth-first-search) to find all the other positions
+that comprise that region.
+
+For each such position, we update the region, mark that position as visited,
+and add the neighboring positions of the region to the depth-first search.
+
+Finally, we return all the regions we have found.
 
 ```haskell
 mkRegions plants = runST do
     ary <- newArray (bounds plants) False :: ST s (STUArray s Pos Bool)
-    let notVisited pos = not <$> readArray ary pos
-    let setVisited pos = writeArray ary pos True
     regions <- newSTRef M.empty
-    for_ (range $ bounds plants) \pos -> notVisited pos >>= flip when do
-        let c = plants!pos
-        k <- M.size <$> readSTRef regions
-        modifySTRef' regions $ M.insert k $ Region 0 S.empty
-        dfsM [pos] \pos -> notVisited pos >>= bool (pure []) do
-```
-
-Having found an unvisited position in region $k$, we mark it as visited and
-then take a look in all the [orthogonal neighbors](#orthogonal-neighbors). Some
-may be off the map, and some may not have the same plant. These will be fences
-around the region.
-
-Adjacent positions that are on the map and have the same plant are part of
-this region, so we return them as the next positions to explore in the
-depth-first search.
-
-```haskell
-            setVisited pos
-            let (onmap,offmap) = ortho plants pos
-            let (yesplant,noplant) = partition ((==c).(plants!).snd) onmap
-            let next = map snd yesplant
-            let fences = map (second $ const pos) $ offmap <> noplant
-            modifySTRef' regions $ flip M.adjust k $ addFences fences
+    for_ (range $ bounds plants) \pos -> ifVisited ary pos () do
+        info <- addRegion regions plants pos
+        dfsM [pos] \pos -> ifVisited ary pos [] do
+            next <- updateRegion regions plants pos info
+            markVisited ary pos
             pure next
+    M.elems <$> readSTRef regions
+
+ifVisited ary pos x e = readArray ary pos >>= bool (pure x) e . not
+markVisited ary pos = writeArray ary pos True
 ```
 
-When the depth-first search is done, we return the regions stored in the map.
+Each region is defined by its index $k$ into the region map and its plant
+character $c$.
 
 ```haskell
-    M.elems <$> readSTRef regions
+addRegion regions plants pos = do
+    k <- M.size <$> readSTRef regions
+    modifySTRef' regions $ M.insert k $ Region 0 S.empty
+    pure (k,plants!pos)
+```
+
+For each position in the region, look at all its
+[orthogonal neighbors](#orthogonal-neighbors).
+Those that are off the map or have a different plant will mark a fence
+around the region. All fences are added to the region.
+
+Those neighbors that are on the map and have the same plant
+are part of the region.
+
+```haskell
+updateRegion regions plants pos (k,c) = do
+    modifySTRef' regions $ flip M.adjust k $ addFences fences
+    pure next
+  where
+    (onmap,offmap) = ortho plants pos
+    (yesplant,noplant) = partition ((==c).(plants!).snd) onmap
+    next = map snd yesplant
+    fences = map (second $ const pos) $ offmap <> noplant
 ```
 
 ## Contiguous fences
 
-We go down the list of fences. Whenever the next fence is not contiguous, we
-add one to the count. A contiguous fence will be in the same direction, and
-the position will be exactly one step away from the previous fence.
+This is for the answer to part 2.  We examine the sorted list of fences.
+Whenever the next fence is not contiguous, we add one to the count. A
+contiguous fence will be in the same direction, and the position will be
+exactly one step away from the previous fence.
 
 ```haskell
 countFences (S.toList -> (start:more)) = go start more where
