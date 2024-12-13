@@ -1,29 +1,23 @@
 # [Day 10](https://adventofcode.com/2024/day/10)
 
-We parse the input into a terrain array.
-
-```haskell top:3
-main :: IO ()
-main = do
-    terrain <- getArray (map digitToInt) terrainAt
-```
-
-## The terrain array
-
-The terrain is an array from positions to heights and trails, where each trail
-is represented by the position of its final peak.
+We parse the input into a terrain array from positions to heights and trails,
+where each trail is represented by the position of its final peak.
 
 ```haskell top:1
 type Terrain = Array Pos (Int,[Pos])
 ```
 
-We're going to define `terrainAt`, which returns the height and the trails
-at a position, given the terrain array.
-The "base case" for this lazy recursive data structure are the peaks.
+```haskell top:3
+main :: IO ()
+main = do
+    terrain <- getArray (map digitToInt) terrainAt :: IO Terrain
+```
+
+## The terrain array
+
 Each peak has exactly one trail: its own position.
 
 ```haskell
-terrainAt :: Terrain -> Pos -> Int -> (Int,[Pos])
 terrainAt ary pos 9 = (9,[pos])
 ```
 
