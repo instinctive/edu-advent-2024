@@ -34,6 +34,12 @@ step W = V2 0 (-1)
 step E = V2 0 ( 1)
 ```
 
+The in-bounds orthogonal neighbors to a position.
+
+```haskell
+neighbors ary pos = filter (inBounds ary) $ (+pos) . step <$> allDirs
+```
+
 ## Read lists of integers
 
 Very common input format.
