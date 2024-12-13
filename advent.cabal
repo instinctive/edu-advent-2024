@@ -21,6 +21,7 @@ common lib-shared
     , linear
     , mtl
     , pcre-heavy
+    , split
     , tagged
     , text
 
@@ -85,3 +86,7 @@ executable day11
 executable day12
   import: shared
   main-is: day12.lhs
+
+executable day13
+  import: shared
+  main-is: day13.lhs

@@ -55,6 +55,15 @@ This is probably worth having separately.
 stringToInts = map (read @Int) . words
 ```
 
+Sometimes the integers are surrounded by cruft.
+
+```haskell
+onlyDigits = map tr where
+    tr c | isDigit c = c
+         | isSpace c = c
+         | otherwise = ' '
+```
+
 ## Read an array
 
 This function takes two arguments: `mkLine` converts the input `String` into
@@ -92,6 +101,7 @@ import Control.Monad.ST    as X
 import Data.Array.IArray   as X
 import Data.Array.ST       as X
 import Data.Array.Unboxed  as X
+import Data.List.Split     as X
 import Linear.V2           as X
 import Control.Monad.State as X
 
