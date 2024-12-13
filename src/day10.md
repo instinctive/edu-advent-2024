@@ -24,6 +24,10 @@ terrainAt ary pos 9 = (9,[pos])
 The trails at any other position are the concatenation of all the
 trails from adjacent positions that are exactly one greater in height.
 
+Note that this is using the elements of the array to calculate other
+elements of the array. This is possible because (a) the `Array` is a lazy
+data structure, and (b) the peaks provide a base case.
+
 ```haskell
 terrainAt ary pos h = (h,trails) where
     trails = concat
