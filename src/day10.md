@@ -29,11 +29,10 @@ elements of the array. This is possible because (a) the `Array` is a lazy
 data structure, and (b) the peaks provide a base case.
 
 ```haskell
-terrainAt ary pos h = (h,trails) where
-    trails = concat
-        [ tt 
-        | (h',tt) <- (ary!) <$> neighbors ary pos
-        , h+1 == h' ]
+terrainAt ary pos h = (h,) $ concat
+    [ tt 
+    | (h',tt) <- (ary!) <$> neighbors ary pos
+    , h+1 == h' ]
 ```
 
 ## Part 1
