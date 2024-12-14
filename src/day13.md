@@ -39,6 +39,10 @@ na &= (qx-nb\times bx) / ax
 \end{aligned}
 ```
 
+(Note that this will not work if A and B are multiples of each other, as both
+the numerator and denominator will be zero. Fortunately, this was not the case
+in my problem input!)
+
 In the code we use `quotRem` for the division,
 and check to see that it is an integral divisor.
 If it's not, then this is not a solution.
