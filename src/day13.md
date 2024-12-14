@@ -24,22 +24,26 @@ and some number $nb$ of B button presses. A solution will satisfy
 the following equations:
 
 ```math
-na * ax + nb * bx = qx
+na \times ax + nb \times bx = qx
 ```
 
 ```math
-na * ay + nb * by = qy
+na \times ay + nb \times by = qy
 ```
 
 Here we have two equations with two unknowns, so we can solve it:
 
 ```math
-nb = {qy*ax-qx*ay}\over by*ax-bx*ay
-na = {qx-nb*bx}\over ax
+nb = (qy*ax-qx*ay) / (by*ax-bx*ay)
 ```
 
-Here it is in code. Note that we use `quotRem` for the division,
+```math
+na = (qx-nb*bx) / ax
+```
+
+In the code we use `quotRem` for the division,
 and check to see that it is an integral divisor.
+If it's not, then this is not a solution.
 
 ```haskell
 solve [ax,ay,bx,by,qx,qy] =
