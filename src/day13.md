@@ -2,37 +2,51 @@
 
 The input is groups of three lines per machine,
 each line having two integers.
+We turn each group into a list of six integers.
 
 ```haskell top:3
 main = do
     input <- map stringToInts . lines . onlyDigits <$> getContents
-    let groups = mkGroup <$> splitOn [[]] input
-    print $ sum $ part1 <$> groups
+    let prizes = concat <$> splitOn [[]] input
+    print $ sum $ mapMaybe solve prizes
+    print $ sum $ mapMaybe (solve . part2) prizes
+```
+
+For part2 we add a large number to the prize positions.
+
+```haskell
+part2 [ax,ay,bx,by,qx,qy] = [ax,ay,bx,by,qx+delta,qy+delta]
+delta = 10000000000000
+```
+
+Each prize solution will have some number $na$ of A button presses,
+and some number $nb$ of B button presses.
+
+```math
+na * ax + nb * bx = qx
+na * ay + nb * by = qy
+```
+
+Here we have two equations with two unknowns, so we can solve it:
+
+```math
+nb = {qy*ax-qx*ay}\over{by*ax-bx*ay)}
+na = {qx-nb*bx}\over ax
+```
+
+Here it is in code. Note that we use `quotRem` for the division,
+and check to see that it is an integral divisor.
+
+```haskell
+solve [ax,ay,bx,by,qx,qy] =
+    case quotRem qq bb of
+        (nb,0) -> 
+            let na = (qx - nb*bx) `div` ax in
+            Just $ 3 * na + nb
+        _ -> Nothing
   where
-    mkGroup (map mkPos -> [a,b,q]) = (a,b,q)
-    mkPos [x,y] = V2 x y
-
-mquot a b = case quotRem a b of
-    (x,0) -> Just x
-    _ -> Nothing
-
-quotPos (V2 x1 y1) (V2 x2 y2) =
-    V2 <$> mquot x1 x2 <*> mquot y1 y2
-
-part1 :: (Pos,Pos,Pos) -> Int
-part1 (av,bv,qv)
-    | null cands = 0
-    | otherwise = minimum cands
-  where
-    cands = mapMaybe go [0..100]
-    go :: Int -> Maybe Int
-    go a | any (<0) qv' = Nothing
-         | otherwise = case quotPos qv' bv of
-            Nothing -> Nothing
-            Just (V2 x y) | x == y -> Just $ a*3 + x
-                          | otherwise -> Nothing
-      where
-        qv' = qv - V2 a a * av
+    qq = qy * ax - qx * ay
+    bb = by * ax - bx * ay
 ```
 
 ## Module header and imports
