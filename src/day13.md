@@ -30,7 +30,7 @@ na * ay + nb * by = qy
 Here we have two equations with two unknowns, so we can solve it:
 
 ```math
-nb = {qy*ax-qx*ay}\over{by*ax-bx*ay)}
+nb = {qy*ax-qx*ay}\over{by*ax-bx*ay}
 na = {qx-nb*bx}\over ax
 ```
 
