@@ -20,19 +20,21 @@ delta = 10000000000000
 ```
 
 Each prize solution will have some number $na$ of A button presses,
-and some number $nb$ of B button presses.
+and some number $nb$ of B button presses. A solution will satisfy
+the following equations:
 
 ```math
-\begin{multiline}
-na * ax + nb * bx = qx\\
+na * ax + nb * bx = qx
+```
+
+```math
 na * ay + nb * by = qy
-\end{multiline}
 ```
 
 Here we have two equations with two unknowns, so we can solve it:
 
 ```math
-nb = {qy*ax-qx*ay}\over{by*ax-bx*ay}
+nb = {qy*ax-qx*ay}\over by*ax-bx*ay
 na = {qx-nb*bx}\over ax
 ```
 
