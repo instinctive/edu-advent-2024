@@ -64,6 +64,4 @@ solve [ax,ay,bx,by,qx,qy] =
 ```haskell top
 module Main where
 import Advent
-import qualified Data.Map as M
-import qualified Data.Set as S
 ```
