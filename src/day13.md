@@ -24,18 +24,17 @@ and some number $nb$ of B button presses. A solution will satisfy
 the following equations:
 
 ```math
-na \times ax + nb \times bx = qx
-```
-
-```math
-na \times ay + nb \times by = qy
+\begin{aligned}
+qx &= na \times ax + nb \times bx \\
+qy &= na \times ay + nb \times by
+\end{aligned}
 ```
 
 Here we have two equations with two unknowns, so we can solve it:
 
 ```math
 \begin{aligned}
-nb &= (qy\times ax-qx\times ay) / (by\times ax-bx\times ay) \\
+nb &= (qy\times ax-qx\times ay) \over (by\times ax-bx\times ay) \\
 na &= (qx-nb\times bx) / ax
 \end{aligned}
 ```
