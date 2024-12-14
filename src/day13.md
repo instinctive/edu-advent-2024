@@ -23,8 +23,10 @@ Each prize solution will have some number $na$ of A button presses,
 and some number $nb$ of B button presses.
 
 ```math
+\begin{multiline}
 na * ax + nb * bx = qx\\
 na * ay + nb * by = qy
+\end{multiline}
 ```
 
 Here we have two equations with two unknowns, so we can solve it:
