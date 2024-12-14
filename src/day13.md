@@ -34,7 +34,7 @@ Here we have two equations with two unknowns, so we can solve it:
 
 ```math
 \begin{aligned}
-nb &= (qy\times ax-qx\times ay) \over (by\times ax-bx\times ay) \\
+nb &= {qy\times ax-qx\times ay \over by\times ax-bx\times ay} \\
 na &= (qx-nb\times bx) / ax
 \end{aligned}
 ```
