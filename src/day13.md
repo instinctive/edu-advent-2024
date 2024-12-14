@@ -34,11 +34,10 @@ na \times ay + nb \times by = qy
 Here we have two equations with two unknowns, so we can solve it:
 
 ```math
-nb = (qy*ax-qx*ay) / (by*ax-bx*ay)
-```
-
-```math
-na = (qx-nb*bx) / ax
+\align{
+nb &= (qy\times ax-qx\times ay) / (by\times ax-bx\times ay)\\
+na &= (qx-nb\times bx) / ax
+}
 ```
 
 In the code we use `quotRem` for the division,
