@@ -1,4 +1,4 @@
-# [Day 12](https://adventofcode.com/2024/day/12)
+# [Day 13](https://adventofcode.com/2024/day/13)
 
 The input is groups of three lines per machine,
 each line having two integers.
