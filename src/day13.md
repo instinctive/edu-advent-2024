@@ -23,7 +23,7 @@ Each prize solution will have some number $na$ of A button presses,
 and some number $nb$ of B button presses.
 
 ```math
-na * ax + nb * bx = qx
+na * ax + nb * bx = qx\\
 na * ay + nb * by = qy
 ```
 
