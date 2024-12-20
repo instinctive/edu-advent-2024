@@ -63,7 +63,7 @@ We associate each item in the warehouse map with its position.
         , i /= Empty ]
 ```
 
-We get the robot position, the walls array, and the set of blocks.o
+We get the robot position, the walls array, and the set of blocks.
 
 ```haskell
     (robot, walls, blocks) = runST do
