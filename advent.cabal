@@ -17,6 +17,7 @@ common lib-shared
   build-depends: base, base-prelude
     , array
     , containers
+    , extra
     , lens
     , linear
     , mtl
@@ -94,3 +95,7 @@ executable day13
 executable day14
   import: shared
   main-is: day14.lhs
+
+executable day15
+  import: shared
+  main-is: day15.lhs

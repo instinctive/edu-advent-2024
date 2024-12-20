@@ -97,6 +97,7 @@ module Advent
     , Map, Set
     ) where
 
+import Control.Monad.Extra as X
 import Control.Monad.ST    as X
 import Data.Array.IArray   as X
 import Data.Array.ST       as X
