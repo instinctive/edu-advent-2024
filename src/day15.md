@@ -2,131 +2,51 @@
 
 ```haskell top:3
 main = do
-    input <- parse <$> getContents
-    print $ solve input
-```
+    input <- getContents
+    print $ solve $ parse $ input
+    -- print $ solve $ parse $ concatMap mkPart2 input
 
-## Parsing the input
+parse input =
+    (robot, M.fromList $ (robot,'O') : items, concatMap toDir $ concat commands)
+  where
+    (grid,_:commands) = break null $ lines input
+    ([(robot,_)],items) = partition ((=='@').snd)
+        [ (V2 r c, x)
+        | (r,xx) <- zip [0..] grid
+        , (c,x)  <- zip [0..] xx
+        , x /= '.' ]
 
-The warehouse map has four kinds of entries.
+toDir '^' = [N]
+toDir '>' = [E]
+toDir 'v' = [S]
+toDir '<' = [W]
 
-```haskell top:1
-data Item = Empty | Block | Wall | Robot deriving (Eq,Ord,Show)
+solve (robot, grid, commands) =
+    score $ foldl' go (grid,robot) commands
+  where
+    go q dir = maybe q
+        (, snd q + step dir)
+        (move q dir)
 
-toItem '.' = Empty
-toItem 'O' = Block
-toItem '#' = Wall
-toItem '@' = Robot
-```
+type Grid = Map Pos Char
+type St = (Grid, Pos)
 
-We keep an array of all the wall positions, and a set of all the block
-positions.
-
-```haskell top:1
-type Walls = UArray Pos Bool
-type Blocks = Set Pos
-```
-
-We parse the input into the robot position, the walls, the blocks, and the
-commands for the robot.
-
-```haskell
-parse :: String -> (Pos, Walls, Blocks, [Dir])
-parse s = (robot, walls, blocks, commands) where
-```
-
-The map of the warehouse is separated from the commands by a blank line.
-
-```haskell
-    (one@(row:_),_:two) = break null $ lines s
-```
-
-The commands are a list of directions for the robot to move.
-
-```haskell
-    commands = concat two <&> \case
-        '^' -> N
-        '>' -> E
-        'v' -> S
-        '<' -> W
-```
-
-We associate each item in the warehouse map with its position.
-
-```haskell
-    nrows = length one
-    ncols = length row
-    items =
-        [ (i, V2 r c)
-        | (r,xx) <- zip [0..] one
-        , (c,i)  <- zip [0..] (toItem <$> xx)
-        , i /= Empty ]
-```
-
-We get the robot position, the walls array, and the set of blocks.
-
-```haskell
-    (robot, walls, blocks) = runST do
-        robot <- newSTRef (V2 0 0)
-        walls <- newArray (0, V2 (nrows-1) (ncols-1)) False :: ST s (STUArray s Pos Bool)
-        blocks <- newSTRef S.empty
-
-        for_ items \(x,pos) -> case x of
-            Robot -> writeSTRef robot pos
-            Block -> modifySTRef' blocks (S.insert pos)
-            Wall  -> writeArray walls pos True
-
-        (,,) <$> readSTRef robot <*> unsafeFreeze walls <*> readSTRef blocks
-```
-
-## Part 1
-
-The answer is a sum of the final GPS coordinates.
-
-```haskell
-solve :: (Pos,Walls,Blocks,[Dir]) -> Int
-solve (robot,walls,blocks,commands) =
-    sum $ map gps $ S.elems final
+score :: St -> Int
+score (grid,robot) =
+    sum $ gps <$> boxes
   where
     gps (V2 r c) = r * 100 + c
-    final = execState (foldM go robot commands) blocks
-```
+    boxes = M.keys $ M.delete robot $ M.filter (=='O') grid
 
-To move the robot, we look at the next space. If it's a wall or empty, we're done.
-
-```haskell
-    go robot dir = do
-        let next = robot + step dir
-        lookup next >>= \case
-            Empty -> pure next
-            Wall  -> pure robot
-```
-
-If it's a block, then we look at the first non-block space in that
-direction. If it's empty, we move the block.
-
-```haskell
-            Block -> check dir next >>= \(item,dest) -> case item of
-                Wall -> pure robot
-                Empty -> do
-                    modify' (S.insert dest . S.delete next)
-                    pure next
-```
-
-Lookup what item is in a space.
-
-```haskell
-    lookup pos
-        | walls!pos = pure Wall
-        | otherwise = gets (S.member pos) >>= pure . bool Empty Block
-```
-
-Check in the given direction for the first non-block space.
-
-```haskell
-    check dir pos = lookup pos >>= \case
-        Block -> check dir (pos + step dir)
-        item -> pure (item,pos)
+move :: St -> Dir -> Maybe Grid
+move (grid,curr) dir = case lookup curr grid of
+    '#' -> Nothing
+    '.' -> Just grid
+    'O' -> move (grid,next) dir >>= Just . push 'O'
+  where
+    next = curr + step dir
+    lookup = M.findWithDefault '.'
+    push x = M.insert next x . M.delete curr
 ```
 
 ## Module header and imports
@@ -134,6 +54,5 @@ Check in the given direction for the first non-block space.
 ```haskell top
 module Main where
 import Advent
-import Data.Array.Unsafe ( unsafeFreeze )
-import qualified Data.Set as S
+import qualified Data.Map.Strict as M
 ```
