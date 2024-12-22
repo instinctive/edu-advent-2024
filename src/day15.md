@@ -7,7 +7,7 @@ main = do
     -- print $ solve $ parse $ concatMap mkPart2 input
 
 parse input =
-    (robot, M.fromList $ (robot,'O') : items, concatMap toDir $ concat commands)
+    (robot, M.fromList items, concatMap toDir $ concat commands)
   where
     (grid,_:commands) = break null $ lines input
     ([(robot,_)],items) = partition ((=='@').snd)
@@ -24,9 +24,8 @@ toDir '<' = [W]
 solve (robot, grid, commands) =
     score $ foldl' go (grid,robot) commands
   where
-    go q dir = maybe q
-        (, snd q + step dir)
-        (move q dir)
+    go q@(grid,curr) dir = let next = curr + step dir in
+        maybe q (, next) (move (grid,next) dir)
 
 type Grid = Map Pos Char
 type St = (Grid, Pos)
