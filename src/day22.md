@@ -1,4 +1,4 @@
-# [Day 21](https://adventofcode.com/2124/day/21)
+# [Day 22](https://adventofcode.com/2224/day/22)
 
 ```haskell
 main = do
