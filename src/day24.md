@@ -2,30 +2,34 @@
 
 ```haskell
 main = do
-    m <- parse <$> getContents
-    let ans1 = part1 m
-    print ans1
+    (values,rules) <- parse <$> getContents
+    print $ part1 values rules
 
-part1 :: Map Text Bool -> Int
-part1 m =
+data Op = OpAnd | OpOr | OpXor deriving (Eq,Ord,Show)
+
+parse s =
+    (mkvalue <$> svalues, mkrule <$> srules)
+  where
+    (svalues,_:srules) = break null $ lines $ map tr s
+    tr ':' = ' '; tr x = x
+    mkvalue (words -> [k,v]) = (T.pack k, read @Int v)
+    mkrule (map T.pack . words -> [a,g,b,_,c]) = (c,(op g,sort [a,b]))
+    op "AND" = OpAnd
+    op "OR"  = OpOr
+    op "XOR" = OpXor
+
+part1 vv rr =
     foldl' (\z x -> z*2 + x) 0  $
-    map (bool 0 1 . snd)        $
+    map snd                     $
     reverse                     $
     filter ((=='z').T.head.fst) $
     M.assocs m
-
-parse s =
-    m
   where
-    m = M.fromList $ (mkval <$> svals) <> (mkrule <$> srules)
-    tr ':' = ' '; tr x = x
-    (svals,_:srules) = break null $ lines $ map tr s
-    mkval (words -> [k,v]) = (T.pack k, v == "1")
-    mkrule (map T.pack . words -> [a,g,b,_,c]) = (c,value) where
-        value = gate g (m M.! a) (m M.! b)
-    gate "AND" = (&&)
-    gate "OR"  = (||)
-    gate "XOR" = xor
+    m = M.fromList $ vv <> map mk rr
+    mk (c,(op,[a,b])) = (c, gate op (m M.! a) (m M.! b))
+    gate OpAnd = (.&.)
+    gate OpOr  = (.|.)
+    gate OpXor = xor
 
 ```
 
